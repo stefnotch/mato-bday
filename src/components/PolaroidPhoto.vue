@@ -32,7 +32,7 @@ const props = defineProps<{
   position: absolute;
   width: calc(var(--width) * 0.6);
   height: calc(var(--width) * 0.8);
-  transition: transform 1s ease-out, width 1s ease-out, height 1s ease-out;
+  transition: transform 1s ease-out, width 0s ease-out, height 0s ease-out;
   background: white;
 }
 .photo {

@@ -24,8 +24,12 @@ function useScreenOrientation() {
   return { isLandscape };
 }
 
-const cardDrag = useCardDrag();
+const degToRad = (deg: number) => (deg * Math.PI) / 180;
+function clamp(x: number, min: number, max: number) {
+  return Math.min(Math.max(x, min), max);
+}
 
+const cardDrag = useCardDrag();
 function useCardDrag() {
   let pointerStart: null | {
     x: number;
@@ -34,7 +38,7 @@ function useCardDrag() {
   const minAngle = 5;
   const maxAngle = 170;
   const forceCardAngle = ref<number | null>(null);
-  const cardAngle = ref(minAngle); // TODO: Change to maxAngle
+  const cardAngle = ref(maxAngle); // TODO: Change to maxAngle
 
   const isAnimating = computed(() => {
     return forceCardAngle.value !== null;
@@ -44,10 +48,6 @@ function useCardDrag() {
     cardAngle.value = clamp(angle, minAngle, maxAngle);
     forceCardAngle.value = null;
   };
-
-  function clamp(x: number, min: number, max: number) {
-    return Math.min(Math.max(x, min), max);
-  }
 
   const pointerDown = (ev: PointerEvent) => {
     setCardAngle(forceCardAngle.value ?? cardAngle.value);
@@ -105,6 +105,22 @@ watchEffect(() => {
     cardClosedTimestamp.value = null;
   }
 });
+
+const cardFrontBrightness = computed(() => {
+  const cardAngle = cardDrag.cardAngle.value - 165;
+  const dotProduct = clamp(Math.cos(degToRad(cardAngle)), 0, 1);
+  const ambient = 0.1;
+  return clamp(1.0 - dotProduct + ambient, 0, 1);
+});
+const cardBackBrightness = computed(() => {
+  if (cardDrag.cardAngle.value < 90) {
+    return cardFrontBrightness.value;
+  }
+  const cardAngle = cardDrag.cardAngle.value - 165;
+  const dotProduct = clamp(Math.cos(degToRad(cardAngle)), 0, 1);
+  const ambient = 0.6;
+  return clamp(dotProduct + ambient, 0, 1);
+});
 </script>
 
 <template>
@@ -146,6 +162,8 @@ watchEffect(() => {
 <style scoped>
 .card {
   --card-width: v-bind("cardWidth");
+  --card-front-darkness: calc(1 - v-bind("cardFrontBrightness"));
+  --card-back-darkness: calc(1 - v-bind("cardBackBrightness"));
 }
 .card {
   height: 100%;
@@ -163,6 +181,7 @@ watchEffect(() => {
   width: var(--card-width);
   height: calc(var(--card-width) * 1.4142);
   transform-style: preserve-3d;
+  border: 2px solid rgb(188, 188, 188);
 }
 .card-left {
   cursor: pointer;
@@ -188,11 +207,19 @@ watchEffect(() => {
   transform: rotateY(170deg);
 }
 .card-left .back {
-  background: url("@/assets/paper-texture-cropped.jpg"), #f6f6f6;
+  background: linear-gradient(
+      rgba(0, 0, 0, var(--card-back-darkness)),
+      rgba(0, 0, 0, var(--card-back-darkness))
+    ),
+    url("@/assets/paper-texture-cropped.jpg"), #f6f6f6;
   background-size: cover;
 }
 .card-left .front {
   background: linear-gradient(
+      rgba(0, 0, 0, var(--card-front-darkness)),
+      rgba(0, 0, 0, var(--card-front-darkness))
+    ),
+    linear-gradient(
       to right,
       rgb(255, 255, 255, 10%) 0%,
       rgb(243, 243, 243, 30%) 70%,

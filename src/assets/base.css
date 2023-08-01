@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Parisienne";
+  src: url("./parisienne/Parisienne-Regular.ttf");
+}
+
 html,
 body,
 #app {

@@ -9,7 +9,20 @@ const cardWidth = computed(() => {
 </script>
 
 <template>
-  <div class="left-side">insert text here</div>
+  <div class="left-side">
+    <div class="text">Dear Mato, we all wish you a very happy birthday!</div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.left-side {
+  height: 100%;
+}
+
+.text {
+  font-size: calc(var(--card-width) * 0.06);
+  padding-top: 70px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+</style>
