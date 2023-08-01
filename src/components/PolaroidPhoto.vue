@@ -32,14 +32,14 @@ const props = defineProps<{
   position: absolute;
   width: calc(var(--width) * 0.6);
   height: calc(var(--width) * 0.8);
-  transition: transform 0.3s ease-out;
+  transition: transform 1s ease-out, width 1s ease-out, height 1s ease-out;
   background: white;
 }
 .photo {
   top: 0;
   left: 0;
   transform: translate(var(--x), var(--y)) rotate(var(--rotation));
-  box-shadow: -4px 1px 5px 0px #e5e5e5, 3px 3px 5px 0px #adadad;
+  box-shadow: -4px 1px 5px 0px #0000001c, 3px 3px 5px 0px #adadad;
 }
 .photo-mirror {
   top: 0;

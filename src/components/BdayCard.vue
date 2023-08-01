@@ -34,7 +34,7 @@ function useCardDrag() {
   const minAngle = 5;
   const maxAngle = 170;
   const forceCardAngle = ref<number | null>(null);
-  const cardAngle = ref(maxAngle);
+  const cardAngle = ref(minAngle); // TODO: Change to maxAngle
 
   const isAnimating = computed(() => {
     return forceCardAngle.value !== null;
@@ -92,6 +92,19 @@ watchEffect(() => {
     cardOpenTimestamp.value = null;
   }
 });
+
+const cardClosedTimestamp = ref<number | null>(null);
+watchEffect(() => {
+  const cardAngle = cardDrag.cardAngle.value;
+  let isCardClosed = cardAngle > 120;
+  if (isCardClosed) {
+    if (cardClosedTimestamp.value === null) {
+      cardClosedTimestamp.value = Date.now();
+    }
+  } else {
+    cardClosedTimestamp.value = null;
+  }
+});
 </script>
 
 <template>
@@ -118,7 +131,10 @@ watchEffect(() => {
     </div>
     <div class="card-right">
       <div class="front card-page">
-        <RightSide :width="cardWidth"></RightSide>
+        <RightSide
+          :width="cardWidth"
+          :start-timestamp="cardClosedTimestamp"
+        ></RightSide>
       </div>
       <div class="back card-page">easter egg - this side is never visible</div>
     </div>
