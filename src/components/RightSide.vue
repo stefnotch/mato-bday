@@ -18,7 +18,13 @@ const image = ref(getRandomPicture());
 
 <template>
   <div class="clip-photos">
-    <PolaroidPhoto :width="cardWidth" :image="image"></PolaroidPhoto>
+    <PolaroidPhoto
+      :width="cardWidth"
+      :image="image"
+      x="8vw"
+      y="20vh"
+      rotation="-25deg"
+    ></PolaroidPhoto>
   </div>
   <span class="small-tomato">🍅</span>
 </template>

@@ -65,7 +65,7 @@ export class ConfettiDrawer {
   confettis: Confetti[] = [];
   constructor() {}
 
-  addConfetti(ctx: CanvasRenderingContext2D, options: ConfettiSpawnOptions) {
+  addConfetti(options: ConfettiSpawnOptions) {
     for (let i = 0; i < options.count; i++) {
       const confettiImage =
         confettis[Math.floor(Math.random() * confettis.length)];

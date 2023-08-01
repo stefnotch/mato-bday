@@ -4,7 +4,7 @@ import LeftSide from "./LeftSide.vue";
 import RightSide from "./RightSide.vue";
 import HappyBirthdayPopup from "./HappyBirthdayPopup.vue";
 import TerrariaConfetti from "./TerrariaConfetti.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 const { isLandscape } = useScreenOrientation();
 
@@ -79,6 +79,19 @@ function useCardDrag() {
     pointerUp,
   };
 }
+
+const cardOpenTimestamp = ref<number | null>(null);
+watchEffect(() => {
+  const cardAngle = cardDrag.cardAngle.value;
+  let isCardOpen = cardAngle < 70;
+  if (isCardOpen) {
+    if (cardOpenTimestamp.value === null) {
+      cardOpenTimestamp.value = Date.now();
+    }
+  } else {
+    cardOpenTimestamp.value = null;
+  }
+});
 </script>
 
 <template>
@@ -110,8 +123,8 @@ function useCardDrag() {
       <div class="back card-page">easter egg - this side is never visible</div>
     </div>
   </div>
-  <HappyBirthdayPopup />
-  <TerrariaConfetti />
+  <HappyBirthdayPopup :start-timestamp="cardOpenTimestamp" :width="cardWidth" />
+  <TerrariaConfetti :start-timestamp="cardOpenTimestamp" />
 </template>
 
 <style scoped>
