@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from "vue";
-import { type ConfettiSpawnOptions, ConfettiDrawer } from "./confetti";
+import { ConfettiDrawer } from "./confetti";
+import { degToRad } from "@/math";
 
 const props = defineProps<{
   startTimestamp: number | null;
@@ -38,8 +39,6 @@ function render() {
   requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
-
-const degToRad = (deg: number) => (deg / 180) * Math.PI;
 
 watchEffect(() => {
   if (props.startTimestamp === null) return;

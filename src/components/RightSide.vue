@@ -92,7 +92,6 @@ watchEffect(() => {
 
 <style scoped>
 .clip-photos {
-  transform: translateZ(1px);
   position: absolute;
   top: 0;
   left: 0;
@@ -101,6 +100,7 @@ watchEffect(() => {
   clip-path: polygon(2px -500%, 500% -500%, 500% 500%, 2px 500%);
 }
 .small-tomato {
+  display: none;
   position: absolute;
   bottom: 12px;
   right: 12px;

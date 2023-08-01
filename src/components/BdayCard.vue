@@ -5,6 +5,7 @@ import RightSide from "./RightSide.vue";
 import HappyBirthdayPopup from "./HappyBirthdayPopup.vue";
 import TerrariaConfetti from "./TerrariaConfetti.vue";
 import { computed, ref, watchEffect } from "vue";
+import { clamp, degToRad } from "@/math";
 
 const { isLandscape } = useScreenOrientation();
 
@@ -22,11 +23,6 @@ function useScreenOrientation() {
     isLandscape.value = getIsLandscape();
   });
   return { isLandscape };
-}
-
-const degToRad = (deg: number) => (deg * Math.PI) / 180;
-function clamp(x: number, min: number, max: number) {
-  return Math.min(Math.max(x, min), max);
 }
 
 const cardDrag = useCardDrag();
@@ -142,7 +138,7 @@ const cardBackBrightness = computed(() => {
         <LeftSide :width="cardWidth"></LeftSide>
       </div>
       <div class="back card-page">
-        <FrontSide :width="cardWidth" />
+        <FrontSide :width="cardWidth" :angle="cardDrag.cardAngle.value" />
       </div>
     </div>
     <div class="card-right">

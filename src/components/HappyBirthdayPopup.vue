@@ -86,11 +86,10 @@ requestAnimationFrame(render);
   justify-content: center;
   align-items: center;
   text-align: center;
-  /*display: none;*/
   user-select: none;
   pointer-events: none;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: calc(2vw);
+  font-family: "Times New Roman", Times, serif;
+  font-size: calc(2.3vw);
   filter: drop-shadow(30px 50px 4px #00000036);
   --card-width: v-bind("cardWidth");
 }
@@ -98,9 +97,11 @@ requestAnimationFrame(render);
 .happy-birthday-message h2 {
   padding: 0;
   margin: 0;
+  font-weight: normal;
 }
 .happy-birthday-image {
   width: 80vw;
   image-rendering: pixelated;
+  filter: drop-shadow(1px 2px 0px black);
 }
 </style>
