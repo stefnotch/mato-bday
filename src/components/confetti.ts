@@ -1,11 +1,6 @@
-/**
- * @typedef {[number, number, number, number]} Color
- */
+type Color = [number, number, number, number];
 
-/**
- * @type {[Color, Color][]}
- */
-const confettiColors = [
+const confettiColors: [Color, Color][] = [
   [
     [21, 160, 235, 1],
     [98, 215, 242, 1],
@@ -24,17 +19,14 @@ const confettiColors = [
   ],
 ];
 
-/**
- * @typedef {number[][]} PixelGrid
- */
+type PixelGrid = number[][];
 
 /**
  * 0 = empty
  * 1 = color 1
  * 2 = color 2
- * @type {PixelGrid[]}
  */
-const confettiTypes = [
+const confettiTypes: PixelGrid[] = [
   [
     [0, 1, 0],
     [1, 2, 1],
@@ -53,56 +45,62 @@ const confettiTypes = [
   ],
 ];
 
-const confettis = [];
+const confettis: ImageBitmap[] = [];
 for (const confettiType of confettiTypes) {
   for (const confettiColor of confettiColors) {
     confettis.push(await toConfettiBitmap(confettiType, confettiColor));
   }
 }
 
-export class ConfettiDrawer {
-  constructor(ctx) {
-    this.ctx = ctx;
-    this.confettis = [];
-  }
+export interface ConfettiSpawnOptions {
+  x: number;
+  y: number;
+  velocity: number;
+  angle: number;
+  spread: number;
+  count: number;
+}
 
-  addConfetti(ctx, x, y, velocity, angle, spread, count) {
-    for (let i = 0; i < count; i++) {
-      const confettiImage = confettis[Math.floor(Math.random() * confettis.length)];
-      const confettiVelocity = Math.random() * velocity + velocity / 2;
-      const confettiAngle = -angle + Math.random() * spread - spread / 2;
+export class ConfettiDrawer {
+  confettis: Confetti[] = [];
+  constructor() {}
+
+  addConfetti(ctx: CanvasRenderingContext2D, options: ConfettiSpawnOptions) {
+    for (let i = 0; i < options.count; i++) {
+      const confettiImage =
+        confettis[Math.floor(Math.random() * confettis.length)];
+      const confettiVelocity =
+        Math.random() * options.velocity + options.velocity / 2;
+      const confettiAngle =
+        -options.angle + Math.random() * options.spread - options.spread / 2;
       const velocityX = Math.cos(confettiAngle) * confettiVelocity;
       const velocityY = Math.sin(confettiAngle) * confettiVelocity;
       const rotation = Math.random() * Math.PI * 2;
       const rotationVelocity = Math.random() * 0.1 - 0.05;
       const gravity = Math.random() * 0.1 + 0.1;
       const size = 2 + Math.round(Math.random() * 2);
-      const confetti = new Confetti(ctx, {
+      const confetti = new Confetti({
         confettiImage,
-        x: x,
-        y: y,
+        x: options.x,
+        y: options.y,
         velocityX,
         velocityY,
         rotation,
         rotationVelocity,
-        gravity, size
+        gravity,
+        size,
       });
       this.confettis.push(confetti);
     }
   }
 
-  render(ctx) {
+  render(ctx: CanvasRenderingContext2D) {
     this.confettis.forEach((confetti) => confetti.render(ctx));
     this.confettis = this.confettis.filter((confetti) => confetti.isAlive);
   }
 }
 
-/**
- * 
- * @param {PixelGrid} pixels 
- * @param {[Color, Color]} colors 
- */
-async function toConfettiBitmap(pixels, colors) {
+async function toConfettiBitmap(pixels: PixelGrid, colors: [Color, Color]) {
   const width = pixels[0].length;
   const height = pixels.length;
   let image = new ImageData(width, height);
@@ -122,17 +120,32 @@ async function toConfettiBitmap(pixels, colors) {
   return await createImageBitmap(image);
 }
 
-/**
- * @typedef {{
- * confettiImage: ImageBitmap, x: number, y: number,
- * velocityX: number, velocityY: number, rotation: number, rotationVelocity: number, gravity: number
- * }} ConfettiOptions
- */
+interface ConfettiOptions {
+  size: number;
+  confettiImage: ImageBitmap;
+  x: number;
+  y: number;
+  velocityX: number;
+  velocityY: number;
+  rotation: number;
+  rotationVelocity: number;
+  gravity: number;
+}
 
 class Confetti {
-  constructor(ctx, options) {
-    this.isAlive = true;
-
+  isAlive: boolean = true;
+  image: ImageBitmap;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  velocityX: number;
+  velocityY: number;
+  rotation: number;
+  rotationVelocity: number;
+  gravity: number;
+  size: number;
+  constructor(options: ConfettiOptions) {
     this.image = options.confettiImage;
     this.width = this.image.width;
     this.height = this.image.height;
@@ -146,7 +159,7 @@ class Confetti {
     this.size = options.size;
   }
 
-  render(ctx) {
+  render(ctx: CanvasRenderingContext2D) {
     this.x += this.velocityX;
     this.y += this.velocityY;
     this.velocityY += this.gravity;
@@ -159,7 +172,13 @@ class Confetti {
     // https://stackoverflow.com/a/38079796/3492994
     ctx.setTransform(this.size, 0, 0, this.size, this.x, this.y);
     ctx.rotate(this.rotation);
-    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+    ctx.drawImage(
+      this.image,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    );
     // Delete confetti if it's out of bounds
     if (this.y > ctx.canvas.height) {
       this.isAlive = false;
