@@ -21,7 +21,7 @@ const cardWidth = computed(() => {
 
 .text {
   font-size: calc(var(--card-width) * 0.06);
-  padding-top: 70px;
+  padding-top: calc(var(--card-width) * 0.2);
   padding-left: 40px;
   padding-right: 40px;
 }

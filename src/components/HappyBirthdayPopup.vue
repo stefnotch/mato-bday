@@ -10,6 +10,7 @@ const cardWidth = computed(() => {
 });
 
 const animationFrames = [
+  "🍅!",
   "ToMato!",
   "To Mato!",
   "To  Mato!",
@@ -100,7 +101,7 @@ requestAnimationFrame(render);
   font-weight: normal;
 }
 .happy-birthday-image {
-  width: 80vw;
+  width: calc(var(--card-width) * 1.8);
   image-rendering: pixelated;
   filter: drop-shadow(1px 2px 0px black);
 }

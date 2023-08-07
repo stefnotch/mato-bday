@@ -12,3 +12,7 @@ Randomly replace Mato with Mango
     - SVG fonts
 
     - https://forums.terraria.org/index.php?threads/to-terraria-with-love-contest-entry-thread.105250/page-2
+
+TODO:
+
+- Happy Birthday is overlapping

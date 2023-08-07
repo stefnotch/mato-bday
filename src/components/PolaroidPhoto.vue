@@ -39,14 +39,14 @@ const props = defineProps<{
   top: 0;
   left: 0;
   transform: translate(var(--x), var(--y)) rotate(var(--rotation));
-  box-shadow: -4px 1px 5px 0px #0000001c, 3px 3px 5px 0px #adadad;
+  box-shadow: -4px 1px 5px 0px #0000001c, 3px 3px 5px 0px #0000005d;
 }
 .photo-mirror {
   top: 0;
   left: calc(var(--width) * -0.6);
   transform: translate(calc(var(--x) * -1), var(--y))
     rotate(calc(var(--rotation) * -1));
-  box-shadow: 3px 3px 5px 0px #292929;
+  box-shadow: 3px 3px 5px 0px #000000d1;
 }
 .photo .img-container {
   padding: 16px;
