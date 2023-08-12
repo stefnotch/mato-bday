@@ -135,7 +135,10 @@ const cardBackBrightness = computed(() => {
       @pointercancel="cardDrag.pointerUp"
     >
       <div class="front card-page">
-        <LeftSide :width="cardWidth"></LeftSide>
+        <LeftSide
+          :width="cardWidth"
+          :open-timestamp="cardOpenTimestamp"
+        ></LeftSide>
       </div>
       <div class="back card-page">
         <FrontSide :width="cardWidth" :angle="cardDrag.cardAngle.value" />
@@ -145,7 +148,8 @@ const cardBackBrightness = computed(() => {
       <div class="front card-page">
         <RightSide
           :width="cardWidth"
-          :start-timestamp="cardClosedTimestamp"
+          :open-timestamp="cardOpenTimestamp"
+          :move-images-timestamp="cardClosedTimestamp"
         ></RightSide>
       </div>
       <div class="back card-page">easter egg - this side is never visible</div>

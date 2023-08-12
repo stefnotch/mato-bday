@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DragHint from "./DragHint.vue";
 import { clamp, degToRad } from "@/math";
 import { computed, ref } from "vue";
 const props = defineProps<{
@@ -29,11 +30,11 @@ const redShineOpacity = computed(() => {
     <div class="decorations">
       <div
         class="decoration"
-        style="width: 70%; height: 4px; top: 55%; left: 18%"
+        style="width: 70%; height: 3px; top: 55%; left: 18%"
       ></div>
       <div
         class="decoration"
-        style="width: 30%; height: 4px; top: 60%; left: 38%"
+        style="width: 30%; height: 3px; top: 60%; left: 38%"
       ></div>
     </div>
 
@@ -77,6 +78,8 @@ const redShineOpacity = computed(() => {
         ></feComposite>
       </filter>
     </svg>-->
+
+    <DragHint />
   </div>
 </template>
 
@@ -157,7 +160,6 @@ const redShineOpacity = computed(() => {
   margin-bottom: calc(var(--card-width) * 0.1);
   font-size: calc(var(--card-width) * 0.178);
   font-family: "Parisienne", cursive;
-  color: #008000;
 }
 .decorations {
   position: absolute;
@@ -168,22 +170,46 @@ const redShineOpacity = computed(() => {
 }
 .decorations .decoration {
   position: absolute;
-  background: #008000;
+  background: linear-gradient(
+    335deg,
+    #462523 0,
+    #cb9b51 11%,
+    #f6e27a 22%,
+    #f6f2c0 25%,
+    #f6e27a 28%,
+    #cb9b51 39%,
+    #462523 50%,
+    #cb9b51 61%,
+    #f6e27a 72%,
+    #f6f2c0 75%,
+    #f6e27a 78%,
+    #cb9b51 89%,
+    #462523 100%
+  );
+  background-size: 280% calc(280% / 0.42261826174);
+  background-position: 0 calc(v-bind("shineOffset"));
 }
-/*
+
 .mato-text {
   color: transparent;
   background: linear-gradient(
-    to right,
+    335deg,
     #462523 0,
-    #cb9b51 22%,
-    #f6e27a 45%,
-    #f6f2c0 50%,
-    #f6e27a 55%,
-    #cb9b51 78%,
+    #cb9b51 11%,
+    #f6e27a 22%,
+    #f6f2c0 25%,
+    #f6e27a 28%,
+    #cb9b51 39%,
+    #462523 50%,
+    #cb9b51 61%,
+    #f6e27a 72%,
+    #f6f2c0 75%,
+    #f6e27a 78%,
+    #cb9b51 89%,
     #462523 100%
   );
-  background-size: 80%;
   background-clip: text;
-}*/
+  background-size: 280% calc(280% / 0.42261826174);
+  background-position: 0 calc(v-bind("shineOffset"));
+}
 </style>

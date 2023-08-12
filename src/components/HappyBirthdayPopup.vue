@@ -10,21 +10,20 @@ const cardWidth = computed(() => {
 });
 
 const animationFrames = [
-  "🍅!",
-  "ToMato!",
-  "To Mato!",
-  "To  Mato!",
-  "To o Mato!",
-  "To ot Mato!",
-  "To out Mato!",
-  "To oust Mato!",
-  "To ourst Mato!",
-  "To ourest Mato!",
-  "To our est Mato!",
-  "To our rest Mato!",
-  "To our drest Mato!",
-  "To our darest Mato!",
-  "To our dearest Mato!",
+  "ToMato! 🍅",
+  "To Mato! 🍅",
+  "To  Mato! 🍅",
+  "To o Mato! 🍅",
+  "To ot Mato! 🍅",
+  "To out Mato! 🍅",
+  "To oust Mato! 🍅",
+  "To ourst Mato! 🍅",
+  "To ourest Mato! 🍅",
+  "To our est Mato! 🍅",
+  "To our rest Mato! 🍅",
+  "To our drest Mato! 🍅",
+  "To our darest Mato! 🍅",
+  "To our dearest Mato! 🍅",
 ];
 
 const subtitleText = ref("");
@@ -53,14 +52,9 @@ requestAnimationFrame(render);
 <template>
   <div
     class="happy-birthday-message"
-    :style="{
-      transition: props.startTimestamp
-        ? 'opacity 0.5s ease-in-out, transform 0.7s 0.0s ease-in-out'
-        : 'none',
-      opacity: props.startTimestamp ? 1 : 0,
-      transform: props.startTimestamp
-        ? 'translateY(calc(var(--card-width) * -0.5)) scale(1)'
-        : 'translateY(0) scale(0.6)',
+    :class="{
+      showAnimation: props.startTimestamp !== null,
+      hideAnimation: props.startTimestamp === null,
     }"
   >
     <div>
@@ -77,6 +71,32 @@ requestAnimationFrame(render);
 </template>
 
 <style scoped>
+.showAnimation {
+  animation: showAnimation 5s ease-in-out 0s 1 normal forwards running;
+  opacity: 1;
+}
+
+@keyframes showAnimation {
+  0% {
+    transition: none;
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(calc(var(--card-width) * -0.5)) scale(0.8);
+  }
+}
+
+.hideAnimation {
+  transition: none;
+  opacity: 0;
+  transform: translateY(0) scale(0);
+}
+
 .happy-birthday-message {
   position: absolute;
   top: 0;
@@ -89,9 +109,12 @@ requestAnimationFrame(render);
   text-align: center;
   user-select: none;
   pointer-events: none;
-  font-family: "Times New Roman", Times, serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  color: #20ab51;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
   font-size: calc(2.3vw);
-  filter: drop-shadow(30px 50px 4px #00000036);
+  filter: drop-shadow(10px 40px 4px #00000036);
   --card-width: v-bind("cardWidth");
 }
 .happy-birthday-message h1,
@@ -99,6 +122,7 @@ requestAnimationFrame(render);
   padding: 0;
   margin: 0;
   font-weight: normal;
+  filter: drop-shadow(1px 2px 0px black);
 }
 .happy-birthday-image {
   width: calc(var(--card-width) * 1.8);

@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 const props = defineProps<{
   width: string;
+  openTimestamp: number | null;
 }>();
 const cardWidth = computed(() => {
   return props.width;
@@ -10,7 +11,15 @@ const cardWidth = computed(() => {
 
 <template>
   <div class="left-side">
-    <div class="text">Dear Mato, we all wish you a very happy birthday!</div>
+    <div
+      class="text"
+      :class="{
+        fadeIn: props.openTimestamp !== null,
+        hidden: props.openTimestamp === null,
+      }"
+    >
+      Dear Mato, we all wish you a very Happy Birthday!
+    </div>
   </div>
 </template>
 
@@ -20,9 +29,12 @@ const cardWidth = computed(() => {
 }
 
 .text {
+  font-family: "Parisienne", cursive;
+  transition: opacity 1s 2s ease-in-out;
   font-size: calc(var(--card-width) * 0.06);
-  padding-top: calc(var(--card-width) * 0.2);
+  padding-top: calc(var(--card-width) * 0.5);
   padding-left: 40px;
   padding-right: 40px;
+  text-align: center;
 }
 </style>

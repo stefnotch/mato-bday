@@ -4,7 +4,8 @@ import image001 from "@/assets/picture-frame/mato-cola.webp";
 import { computed, ref, type ComputedRef, watchEffect } from "vue";
 const props = defineProps<{
   width: string;
-  startTimestamp: number | null;
+  openTimestamp: number | null;
+  moveImagesTimestamp: number | null;
 }>();
 const cardWidth = computed(() => {
   return props.width;
@@ -67,16 +68,31 @@ const getRandomImageLayout = () => {
 };
 const imageLayout = ref(getRandomImageLayout());
 
+const emojis = ["🍅", "🥭"];
+
+const getRandomEmoji = () => {
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
+
+const emoji = ref(getRandomEmoji());
+
 watchEffect(() => {
-  const timestamp = props.startTimestamp;
+  const timestamp = props.moveImagesTimestamp;
   if (!timestamp) return;
   image.value = getRandomPicture();
   imageLayout.value = getRandomImageLayout();
+  emoji.value = getRandomEmoji();
 });
 </script>
 
 <template>
-  <div class="clip-photos">
+  <div
+    class="clip-photos"
+    :class="{
+      fadeIn: props.openTimestamp !== null,
+      hidden: props.openTimestamp === null,
+    }"
+  >
     <template v-for="(layout, index) in imageLayout" :key="index">
       <PolaroidPhoto
         :width="`calc(${cardWidth} * ${layout.widthMultiplier})`"
@@ -87,7 +103,8 @@ watchEffect(() => {
       ></PolaroidPhoto>
     </template>
   </div>
-  <span class="small-tomato">🍅</span>
+
+  <span class="small-tomato">{{ emoji }}</span>
 </template>
 
 <style scoped>
@@ -100,7 +117,6 @@ watchEffect(() => {
   clip-path: polygon(2px -500%, 500% -500%, 500% 500%, 2px 500%);
 }
 .small-tomato {
-  display: none;
   position: absolute;
   bottom: 12px;
   right: 12px;
