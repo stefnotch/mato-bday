@@ -76,6 +76,11 @@ function useCardDrag() {
   };
 }
 
+const openedCounter = ref(0);
+const animationDuration = computed(() => {
+  return openedCounter.value < 3 ? 6 : 1;
+});
+
 const cardOpenTimestamp = ref<number | null>(null);
 watchEffect(() => {
   const cardAngle = cardDrag.cardAngle.value;
@@ -83,6 +88,7 @@ watchEffect(() => {
   if (isCardOpen) {
     if (cardOpenTimestamp.value === null) {
       cardOpenTimestamp.value = Date.now();
+      openedCounter.value += 1;
     }
   } else {
     cardOpenTimestamp.value = null;
@@ -138,6 +144,7 @@ const cardBackBrightness = computed(() => {
         <LeftSide
           :width="cardWidth"
           :open-timestamp="cardOpenTimestamp"
+          :animation-duration="animationDuration"
         ></LeftSide>
       </div>
       <div class="back card-page">
@@ -150,12 +157,17 @@ const cardBackBrightness = computed(() => {
           :width="cardWidth"
           :open-timestamp="cardOpenTimestamp"
           :move-images-timestamp="cardClosedTimestamp"
+          :animation-duration="animationDuration"
         ></RightSide>
       </div>
       <div class="back card-page">easter egg - this side is never visible</div>
     </div>
   </div>
-  <HappyBirthdayPopup :start-timestamp="cardOpenTimestamp" :width="cardWidth" />
+  <HappyBirthdayPopup
+    :start-timestamp="cardOpenTimestamp"
+    :width="cardWidth"
+    :animation-duration="animationDuration"
+  />
   <TerrariaConfetti :start-timestamp="cardOpenTimestamp" />
 </template>
 

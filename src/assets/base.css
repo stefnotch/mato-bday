@@ -19,10 +19,6 @@ body {
   opacity: 0;
 }
 
-.fadeIn {
-  animation: fadeIn 6s ease-in-out;
-}
-
 @keyframes fadeIn {
   0% {
     opacity: 0;

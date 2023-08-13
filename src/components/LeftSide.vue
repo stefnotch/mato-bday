@@ -3,10 +3,13 @@ import { computed, ref } from "vue";
 const props = defineProps<{
   width: string;
   openTimestamp: number | null;
+  animationDuration: number;
 }>();
 const cardWidth = computed(() => {
   return props.width;
 });
+
+const fadeDuration = computed(() => props.animationDuration + "s");
 </script>
 
 <template>
@@ -24,13 +27,15 @@ const cardWidth = computed(() => {
 </template>
 
 <style scoped>
+.fadeIn {
+  animation: fadeIn v-bind("fadeDuration") ease-in-out;
+}
 .left-side {
   height: 100%;
 }
 
 .text {
   font-family: "Parisienne", cursive;
-  transition: opacity 1s 2s ease-in-out;
   font-size: calc(var(--card-width) * 0.06);
   padding-top: calc(var(--card-width) * 0.5);
   padding-left: 40px;

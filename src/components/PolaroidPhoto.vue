@@ -40,6 +40,7 @@ const props = defineProps<{
   left: 0;
   transform: translate(var(--x), var(--y)) rotate(var(--rotation));
   box-shadow: -4px 1px 5px 0px #0000001c, 3px 3px 5px 0px #0000005d;
+  display: flex;
 }
 .photo-mirror {
   top: 0;
@@ -51,6 +52,7 @@ const props = defineProps<{
 .photo .img-container {
   padding: 16px;
   padding-bottom: 32px;
+  overflow-y: hidden;
 }
 .photo img {
   width: 100%;

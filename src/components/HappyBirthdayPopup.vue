@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 const props = defineProps<{
   width: string;
   startTimestamp: number | null;
+  animationDuration: number;
 }>();
 const cardWidth = computed(() => {
   return props.width;
@@ -47,6 +48,10 @@ function render() {
   requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
+
+const showAnimationDuration = computed(
+  () => (props.animationDuration / 6) * 5 + "s"
+);
 </script>
 
 <template>
@@ -72,7 +77,8 @@ requestAnimationFrame(render);
 
 <style scoped>
 .showAnimation {
-  animation: showAnimation 5s ease-in-out 0s 1 normal forwards running;
+  animation: showAnimation v-bind("showAnimationDuration") ease-in-out 0s 1
+    normal forwards running;
   opacity: 1;
 }
 

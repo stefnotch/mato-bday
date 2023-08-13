@@ -1,21 +1,61 @@
 <script setup lang="ts">
 import PolaroidPhoto from "./PolaroidPhoto.vue";
-import image001 from "@/assets/picture-frame/mato-cola.webp";
+import image000 from "@/assets/picture-frame/mato-cola.webp";
+import image001 from "@/assets/picture-frame/image1.webp";
+import image002 from "@/assets/picture-frame/image2.webp";
+import image003 from "@/assets/picture-frame/image3.webp";
+import image004 from "@/assets/picture-frame/image4.webp";
+import image005 from "@/assets/picture-frame/image5.webp";
+import image006 from "@/assets/picture-frame/image6.webp";
+import image007 from "@/assets/picture-frame/image7.webp";
+import image008 from "@/assets/picture-frame/image8.webp";
 import { computed, ref, type ComputedRef, watchEffect } from "vue";
 const props = defineProps<{
   width: string;
   openTimestamp: number | null;
   moveImagesTimestamp: number | null;
+  animationDuration: number;
 }>();
 const cardWidth = computed(() => {
   return props.width;
 });
 
-const pictures = [image001];
-const getRandomPicture = () => {
-  return pictures[Math.floor(Math.random() * pictures.length)];
+const pictures = [
+  image000,
+  image001,
+  image002,
+  image003,
+  image004,
+  image005,
+  image006,
+  image007,
+  image008,
+];
+shuffle(pictures);
+/**
+ * From https://stackoverflow.com/a/2450976/3492994
+ */
+function shuffle<T>(array: T[]) {
+  let currentIndex = array.length;
+  while (currentIndex != 0) {
+    const randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+  return array;
+}
+let imageIndex = 0;
+const getNextPicture = () => {
+  const picture = pictures[imageIndex];
+  imageIndex += 1;
+  if (imageIndex >= pictures.length) {
+    imageIndex = 0;
+  }
+  return picture;
 };
-const image = ref(getRandomPicture());
 
 interface ImageLayout {
   x: string;
@@ -64,7 +104,11 @@ const imageLayouts: ImageLayout[][] = [
   ],
 ];
 const getRandomImageLayout = () => {
-  return imageLayouts[Math.floor(Math.random() * imageLayouts.length)];
+  const layouts = imageLayouts[Math.floor(Math.random() * imageLayouts.length)];
+  return layouts.map((layout) => ({
+    layout,
+    image: getNextPicture(),
+  }));
 };
 const imageLayout = ref(getRandomImageLayout());
 
@@ -79,10 +123,10 @@ const emoji = ref(getRandomEmoji());
 watchEffect(() => {
   const timestamp = props.moveImagesTimestamp;
   if (!timestamp) return;
-  image.value = getRandomPicture();
   imageLayout.value = getRandomImageLayout();
   emoji.value = getRandomEmoji();
 });
+const fadeDuration = computed(() => props.animationDuration + "s");
 </script>
 
 <template>
@@ -95,11 +139,11 @@ watchEffect(() => {
   >
     <template v-for="(layout, index) in imageLayout" :key="index">
       <PolaroidPhoto
-        :width="`calc(${cardWidth} * ${layout.widthMultiplier})`"
-        :image="image"
-        :x="layout.x"
-        :y="layout.y"
-        :rotation="layout.rotation"
+        :width="`calc(${cardWidth} * ${layout.layout.widthMultiplier})`"
+        :image="layout.image"
+        :x="layout.layout.x"
+        :y="layout.layout.y"
+        :rotation="layout.layout.rotation"
       ></PolaroidPhoto>
     </template>
   </div>
@@ -108,6 +152,9 @@ watchEffect(() => {
 </template>
 
 <style scoped>
+.fadeIn {
+  animation: fadeIn v-bind("fadeDuration") ease-in-out;
+}
 .clip-photos {
   position: absolute;
   top: 0;

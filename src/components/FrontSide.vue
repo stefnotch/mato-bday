@@ -44,6 +44,12 @@ const redShineOpacity = computed(() => {
       </div>
       <div class="red-shine"><img src="@/assets/tomatoes-fill.png" /></div>
     </div>
+    <div class="bottom-left-images">
+      <div class="gold-shine">
+        <img src="@/assets/tomatoes-outlines.png" />
+      </div>
+      <div class="red-shine"><img src="@/assets/tomatoes-fill.png" /></div>
+    </div>
     <!--<img src="@/assets/tomatoes-fill.png" class="top-right-image" />-->
     <!-- <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
       <filter id="noise2">
@@ -94,7 +100,14 @@ const redShineOpacity = computed(() => {
   position: absolute;
   top: 0;
   right: 0;
-  height: 20%;
+  height: 25%;
+}
+.bottom-left-images {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 18%;
+  transform: scaleX(-1);
 }
 .gold-shine {
   height: 100%;
@@ -127,7 +140,8 @@ const redShineOpacity = computed(() => {
 .gold-shine img {
   opacity: 0;
 }
-.top-right-images img {
+.top-right-images img,
+.bottom-left-images img {
   height: 100%;
 }
 .red-shine {
@@ -208,6 +222,8 @@ const redShineOpacity = computed(() => {
     #cb9b51 89%,
     #462523 100%
   );
+  /* AAAAAA why do I need vendor prefixes for this? */
+  -webkit-background-clip: text;
   background-clip: text;
   background-size: 280% calc(280% / 0.42261826174);
   background-position: 0 calc(v-bind("shineOffset"));
